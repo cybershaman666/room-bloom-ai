@@ -1,63 +1,116 @@
 :root {
-  --color-bg: #fdfcf7;       /* světle písková / sluneční světlo */
-  --color-primary: #4caf83;  /* jemně zelená */
-  --color-secondary: #f4a261;/* teplá oranžová */
-  --color-accent: #2a9d8f;   /* tyrkysový akcent */
-  --color-text: #2c3e2f;     /* tmavě zelenohnědý text */
-  --shadow-soft: 0 4px 12px rgba(0,0,0,0.08);
-  --radius-xl: 16px;
+  /* Solarpunk barevná paleta - světlé a živé tóny */
+  --color-bg: #f5f8f3; /* Lehce zelenkavá bílá */
+  --color-primary: #5cb85c; /* Živá, lístková zelená */
+  --color-secondary: #f0ad4e; /* Sytá sluneční oranžová */
+  --color-accent: #34aadc; /* Světle modrá jako obloha */
+  --color-text: #2f4f4f; /* Tmavá petrolejová zelená */
+  
+  /* Stíny a radiály pro moderní feeling */
+  --shadow-soft: 0 8px 30px rgba(0,0,0,0.1);
+  --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  --radius-xl: 24px;
+  --glass-blur: 8px;
+  --glass-border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-  background: var(--color-bg);
+body, #root {
+  min-height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(180deg, var(--color-bg), #d8f3dc); /* Jemný gradient pro hloubku */
   color: var(--color-text);
   font-family: 'Nunito', 'Segoe UI', sans-serif;
+  text-align: center;
+  padding: 2rem;
+  overflow: auto; /* Zajištění správného chování při menším obsahu */
 }
 
-/* Logo – organický nádech */
+/* Glassmorphism základní styl */
+.glass {
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  background: rgba(255, 255, 255, 0.2);
+  border: var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Animovaný pozadí, které dýchá a pulzuje */
+@keyframes background-pulse {
+  0% { background-size: 100% 100%; }
+  50% { background-size: 110% 110%; }
+  100% { background-size: 100% 100%; }
+}
+
+#root.with-animation {
+  animation: background-pulse 60s ease-in-out infinite;
+}
+
+/* Logo - organický, pulzující prvek */
 .logo {
   height: 6em;
   padding: 1.5em;
   border-radius: var(--radius-xl);
   background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-  box-shadow: var(--shadow-soft);
-  transition: transform 300ms ease, filter 300ms ease;
+  box-shadow: var(--glass-shadow);
+  transition: transform 300ms ease, box-shadow 300ms ease;
 }
+
 .logo:hover {
-  transform: scale(1.05);
-  filter: drop-shadow(0 0 1.5em var(--color-secondary));
+  transform: scale(1.1);
+  box-shadow: 0 0 20px 5px var(--color-secondary);
 }
 
-/* Animace – jako pomalé slunce */
-@keyframes logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 40s linear;
-  }
-}
-
+/* Karta s glassmorphism efektem */
 .card {
-  padding: 2em;
-  margin: 1.5em 0;
-  background: #ffffffcc;
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-soft);
-  transition: transform 200ms ease;
-}
-.card:hover {
-  transform: translateY(-4px);
+  padding: 2.5em; /* Větší padding pro vzdušnost */
+  margin: 2em auto; /* Zvětšené okraje */
+  max-width: 400px;
+  @extend .glass; /* Použití .glass třídy */
+  transition: transform 200ms ease, box-shadow 200ms ease;
 }
 
-/* Sekundární text */
+.card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15); /* Výraznější stín při hoveru */
+}
+
+/* Ostatní prvky - modernizace a zjemnění */
 .read-the-docs {
-  color: var(--color-secondary);
+  color: var(--color-text); /* Lepší kontrast */
   font-style: italic;
-  opacity: 0.9;
+  opacity: 0.8;
+  font-weight: 500;
+  border-bottom: 2px solid var(--color-secondary); /* Podtržení s barvou */
+  padding-bottom: 2px;
+  display: inline-block;
+}
+
+h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin-bottom: 0.5em;
+  color: var(--color-primary);
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.05); /* Jemný stín pro text */
+}
+
+button {
+  background: linear-gradient(45deg, var(--color-primary), var(--color-accent));
+  color: #fff;
+  border: none;
+  border-radius: 50px; /* Zakulacená tlačítka */
+  padding: 0.8em 2em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
 }
