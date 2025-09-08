@@ -1,42 +1,63 @@
+:root {
+  --color-bg: #fdfcf7;       /* světle písková / sluneční světlo */
+  --color-primary: #4caf83;  /* jemně zelená */
+  --color-secondary: #f4a261;/* teplá oranžová */
+  --color-accent: #2a9d8f;   /* tyrkysový akcent */
+  --color-text: #2c3e2f;     /* tmavě zelenohnědý text */
+  --shadow-soft: 0 4px 12px rgba(0,0,0,0.08);
+  --radius-xl: 16px;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Nunito', 'Segoe UI', sans-serif;
 }
 
+/* Logo – organický nádech */
 .logo {
   height: 6em;
   padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  box-shadow: var(--shadow-soft);
+  transition: transform 300ms ease, filter 300ms ease;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 1.5em var(--color-secondary));
 }
 
+/* Animace – jako pomalé slunce */
 @keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
-
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+    animation: logo-spin infinite 40s linear;
   }
 }
 
 .card {
   padding: 2em;
+  margin: 1.5em 0;
+  background: #ffffffcc;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-soft);
+  transition: transform 200ms ease;
+}
+.card:hover {
+  transform: translateY(-4px);
 }
 
+/* Sekundární text */
 .read-the-docs {
-  color: #888;
+  color: var(--color-secondary);
+  font-style: italic;
+  opacity: 0.9;
 }
