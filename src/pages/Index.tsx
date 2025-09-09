@@ -31,7 +31,7 @@ const Index = () => {
         <div className="text-center mb-16">
           <div className="flex items-center justify-center mb-6">
             <Building2 className="h-12 w-12 text-primary mr-3" />
-            <h1 className="text-4xl font-bold text-primary">HostelPro</h1>
+            <h1 className="text-4xl font-bold text-primary">RoomBloom</h1>
           </div>
           <h2 className="text-5xl font-bold mb-6">
             Smart Revenue Management for
@@ -54,7 +54,7 @@ const Index = () => {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 mb-16">
-          <div className="text-center p-6 rounded-lg border border-border">
+          <div className="glass-card text-center p-8 organic-hover">
             <Calendar className="h-12 w-12 text-primary mx-auto mb-4" />
             <h3 className="text-xl font-semibold mb-3">Smart Reservations</h3>
             <p className="text-muted-foreground">
@@ -63,7 +63,7 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="text-center p-6 rounded-lg border border-border">
+          <div className="glass-card text-center p-8 organic-hover">
             <DollarSign className="h-12 w-12 text-primary mx-auto mb-4" />
             <h3 className="text-xl font-semibold mb-3">AI Pricing Engine</h3>
             <p className="text-muted-foreground">
@@ -72,7 +72,7 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="text-center p-6 rounded-lg border border-border">
+          <div className="glass-card text-center p-8 organic-hover">
             <BarChart3 className="h-12 w-12 text-primary mx-auto mb-4" />
             <h3 className="text-xl font-semibold mb-3">Revenue Analytics</h3>
             <p className="text-muted-foreground">
@@ -82,7 +82,7 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="text-center bg-muted rounded-lg p-12">
+        <div className="glass-card text-center p-12 organic-hover">
           <h3 className="text-3xl font-bold mb-4">Ready to optimize your revenue?</h3>
           <p className="text-lg text-muted-foreground mb-6">
             Join hundreds of property owners who've increased their revenue by 25% on average

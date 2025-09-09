@@ -2,39 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Solarpunk design system: světlé, přírodní barvy v HSL */
+/* Solarpunk design system: organické barvy s glassmorphism efekty */
 
 @layer base {
   :root {
-    --background: 45 60% 98%;          /* světlá písková */
-    --foreground: 160 20% 20%;         /* tmavě zelenohnědý text */
+    --background: 95 40% 96%;          /* organická krémová */
+    --foreground: 160 25% 15%;         /* hluboká lesní zelená */
 
-    --card: 0 0% 100%;
-    --card-foreground: 160 20% 20%;
+    --card: 0 0% 100% / 0.7;           /* průhledná bílá pro glassmorphism */
+    --card-foreground: 160 25% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 160 20% 20%;
+    --popover: 0 0% 100% / 0.9;
+    --popover-foreground: 160 25% 15%;
 
-    --primary: 156 35% 40%;            /* přírodní zelená */
-    --primary-foreground: 45 60% 98%;  /* světle písková */
+    --primary: 145 60% 45%;            /* živá přírodní zelená */
+    --primary-foreground: 95 40% 96%;
 
-    --secondary: 27 74% 65%;           /* teplá oranžová */
-    --secondary-foreground: 160 20% 20%;
+    --secondary: 35 85% 65%;           /* teplá zlatavá oranžová */
+    --secondary-foreground: 160 25% 15%;
 
-    --muted: 160 20% 92%;              /* velmi světlá zelenkavá */
-    --muted-foreground: 160 10% 40%;
+    --muted: 120 30% 90% / 0.6;        /* průhledná světle zelená */
+    --muted-foreground: 160 20% 35%;
 
-    --accent: 174 45% 45%;             /* tyrkysový akcent */
-    --accent-foreground: 45 60% 98%;
+    --accent: 185 70% 50%;             /* čistý tyrkys */
+    --accent-foreground: 95 40% 96%;
 
     --destructive: 0 70% 50%;
-    --destructive-foreground: 45 60% 98%;
+    --destructive-foreground: 95 40% 96%;
 
-    --border: 160 20% 85%;
-    --input: 160 20% 85%;
-    --ring: 174 45% 45%;
+    --border: 120 20% 80% / 0.3;       /* průhledné hranice */
+    --input: 120 20% 85% / 0.4;
+    --ring: 185 70% 50%;
 
-    --radius: 1rem;
+    --radius: 1.5rem;                  /* organičtější zaoblení */
+    
+    /* Glassmorphism efekty */
+    --glass-bg: 0 0% 100% / 0.1;
+    --glass-border: 0 0% 100% / 0.2;
+    --glass-shadow: 0 8px 32px 0 hsl(0 0% 0% / 0.1);
+    --backdrop-blur: 12px;
 
     --sidebar-background: 45 60% 97%;
     --sidebar-foreground: 160 25% 20%;
@@ -47,33 +53,38 @@
   }
 
   .dark {
-    --background: 160 20% 12%;         /* hluboká zelenohnědá */
-    --foreground: 45 60% 96%;
+    --background: 160 30% 8%;          /* hluboká noční zelená */
+    --foreground: 95 40% 94%;
 
-    --card: 160 20% 15%;
-    --card-foreground: 45 60% 96%;
+    --card: 160 20% 12% / 0.8;         /* průhledná tmavá karta */
+    --card-foreground: 95 40% 94%;
 
-    --popover: 160 20% 15%;
-    --popover-foreground: 45 60% 96%;
+    --popover: 160 20% 10% / 0.9;
+    --popover-foreground: 95 40% 94%;
 
-    --primary: 156 35% 45%;
-    --primary-foreground: 45 60% 96%;
+    --primary: 145 60% 55%;            /* jasnější zelená v dark mode */
+    --primary-foreground: 160 30% 8%;
 
-    --secondary: 27 74% 55%;
-    --secondary-foreground: 45 60% 96%;
+    --secondary: 35 85% 70%;           /* jasnější oranžová */
+    --secondary-foreground: 160 30% 8%;
 
-    --muted: 160 20% 25%;
-    --muted-foreground: 45 30% 70%;
+    --muted: 160 20% 20% / 0.6;        /* průhledná tmavá */
+    --muted-foreground: 95 20% 65%;
 
-    --accent: 174 45% 40%;
-    --accent-foreground: 45 60% 96%;
+    --accent: 185 70% 60%;             /* jasnější tyrkys */
+    --accent-foreground: 160 30% 8%;
 
-    --destructive: 0 62% 40%;
-    --destructive-foreground: 45 60% 96%;
+    --destructive: 0 70% 60%;
+    --destructive-foreground: 95 40% 94%;
 
-    --border: 160 20% 25%;
-    --input: 160 20% 25%;
-    --ring: 174 45% 45%;
+    --border: 160 15% 25% / 0.3;       /* průhledné tmavé hranice */
+    --input: 160 15% 20% / 0.4;
+    --ring: 185 70% 60%;
+    
+    /* Dark glassmorphism */
+    --glass-bg: 160 15% 15% / 0.2;
+    --glass-border: 95 20% 80% / 0.1;
+    --glass-shadow: 0 8px 32px 0 hsl(0 0% 0% / 0.3);
 
     --sidebar-background: 160 20% 14%;
     --sidebar-foreground: 45 60% 96%;
@@ -94,5 +105,31 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Nunito', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, hsl(var(--background)), hsl(120 40% 92%));
+    min-height: 100vh;
+  }
+  
+  /* Glassmorphism utilities */
+  .glass {
+    background: hsl(var(--glass-bg));
+    backdrop-filter: blur(var(--backdrop-blur));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur));
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: var(--glass-shadow);
+  }
+  
+  .glass-card {
+    @apply glass rounded-2xl border border-border/30;
+    background: hsl(var(--card));
+  }
+  
+  /* Organic animations */
+  .organic-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+  
+  .organic-hover:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 12px 40px -4px hsl(var(--primary) / 0.2);
   }
 }

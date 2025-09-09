@@ -37,7 +37,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onPageChange }) => {
         <div className="flex items-center">
           <Building2 className="h-8 w-8 text-sidebar-primary mr-3" />
           <div>
-            <h2 className="text-lg font-semibold text-sidebar-foreground">HostelPro</h2>
+            <h2 className="text-lg font-semibold text-sidebar-foreground">RoomBloom</h2>
             <p className="text-sm text-sidebar-foreground/60">Revenue Management</p>
           </div>
         </div>
