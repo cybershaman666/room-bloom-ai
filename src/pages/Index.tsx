@@ -54,7 +54,7 @@ const Index = () => {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 mb-16">
-          <div className="glass-card text-center p-8 organic-hover">
+          <div className="bg-card text-center p-8 rounded-lg border">
             <Calendar className="h-12 w-12 text-primary mx-auto mb-4" />
             <h3 className="text-xl font-semibold mb-3">Smart Reservations</h3>
             <p className="text-muted-foreground">
@@ -63,7 +63,7 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="glass-card text-center p-8 organic-hover">
+          <div className="bg-card text-center p-8 rounded-lg border">
             <DollarSign className="h-12 w-12 text-primary mx-auto mb-4" />
             <h3 className="text-xl font-semibold mb-3">AI Pricing Engine</h3>
             <p className="text-muted-foreground">
@@ -72,7 +72,7 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="glass-card text-center p-8 organic-hover">
+          <div className="bg-card text-center p-8 rounded-lg border">
             <BarChart3 className="h-12 w-12 text-primary mx-auto mb-4" />
             <h3 className="text-xl font-semibold mb-3">Revenue Analytics</h3>
             <p className="text-muted-foreground">
@@ -82,7 +82,7 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="glass-card text-center p-12 organic-hover">
+        <div className="bg-card text-center p-12 rounded-lg border">
           <h3 className="text-3xl font-bold mb-4">Ready to optimize your revenue?</h3>
           <p className="text-lg text-muted-foreground mb-6">
             Join hundreds of property owners who've increased their revenue by 25% on average

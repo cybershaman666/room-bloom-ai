@@ -45,17 +45,82 @@ interface AIPricingSuggestion {
 class AIPricingService {
   private async callAI(prompt: string): Promise<any> {
     try {
-      const response = await fetch('/api/ai-pricing', {
+      // Get API key from environment - for client-side, we'll use a more secure approach
+      const apiKey = import.meta.env.VITE_GOOGLE_AI_API_KEY || 'AIzaSyDDNd0lew1eKcgFzOXqznqxxVBxf9CGv5o';
+      
+      if (!apiKey) {
+        throw new Error('GOOGLE_AI_API_KEY not configured');
+      }
+      
+      // Enhanced prompt for better JSON responses
+      const enhancedPrompt = `${prompt}
+
+Please respond with a valid JSON object in this exact format:
+{
+  "suggestions": [
+    {
+      "date": "YYYY-MM-DD",
+      "suggestedPrice": 120,
+      "confidence": 85,
+      "reasoning": "Weekend premium pricing",
+      "factors": ["weekend", "demand"],
+      "impact": "increase"
+    }
+  ]
+}
+
+Only return the JSON object, no additional text or markdown formatting.`;
+      
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt })
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{ text: enhancedPrompt }]
+          }],
+          generationConfig: {
+            temperature: 0.3,
+            maxOutputTokens: 1024,
+            topK: 40,
+            topP: 0.95
+          }
+        })
       });
       
       if (!response.ok) {
-        throw new Error('AI service unavailable');
+        const errorData = await response.json().catch(() => ({ error: { message: 'Unknown error' } }));
+        console.error('Gemini API error:', response.status, errorData);
+        
+        if (response.status === 429) {
+          console.warn('API quota exceeded, using intelligent fallback');
+          throw new Error('API quota exceeded');
+        }
+        
+        throw new Error(`Gemini API error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
       }
       
-      return await response.json();
+      const data = await response.json();
+      
+      if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
+        console.error('Invalid response from Gemini API:', data);
+        throw new Error('Invalid AI response format');
+      }
+      
+      const text = data.candidates[0].content.parts[0].text;
+      
+      // Clean the response text to extract JSON
+      let jsonText = text.trim();
+      
+      // Remove markdown code blocks if present
+      jsonText = jsonText.replace(/```json\s*/, '').replace(/```\s*$/, '');
+      
+      // Try to parse the JSON
+      const suggestions = JSON.parse(jsonText);
+      
+      return suggestions;
+      
     } catch (error) {
       console.warn('AI service failed, using fallback:', error);
       return this.generateSmartFallback(prompt);
@@ -233,11 +298,49 @@ const AIPricingSuggestions: React.FC = () => {
 
   const checkAiConnection = async () => {
     try {
-      await fetch('/api/ai-pricing/health');
-      setIsAiConnected(true);
+      const apiKey = import.meta.env.VITE_GOOGLE_AI_API_KEY || 'AIzaSyDDNd0lew1eKcgFzOXqznqxxVBxf9CGv5o';
+      
+      console.log('API Key available:', !!apiKey, 'Length:', apiKey?.length);
+      
+      if (!apiKey) {
+        console.warn('No API key found');
+        setIsAiConnected(false);
+        return;
+      }
+      
+      // Test with a simple request to the Gemini API
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{ text: 'Test connection. Respond with: {"status":"ok"}' }]
+          }],
+          generationConfig: {
+            temperature: 0.1,
+            maxOutputTokens: 50
+          }
+        })
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setIsAiConnected(true);
+        console.log('AI service connected successfully:', data);
+      } else if (response.status === 429) {
+        // Quota exceeded, but API key and model are valid
+        setIsAiConnected(false);
+        console.warn('AI service quota exceeded, using intelligent fallback');
+      } else {
+        setIsAiConnected(false);
+        const errorData = await response.json().catch(() => ({}));
+        console.warn('AI service connection failed:', response.status, errorData);
+      }
     } catch (error) {
       setIsAiConnected(false);
-      console.warn('AI service not available, using smart fallback');
+      console.warn('AI service not available, using smart fallback:', error);
     }
   };
 
