@@ -245,14 +245,22 @@ const AIPricingSuggestions: React.FC = () => {
     try {
       const { data, error } = await supabase
         .from('properties')
-        .select('id, name, base_price, currency, location, type, amenities')
+        .select('id, name, base_price, currency, city, country, property_type, amenities')
         .eq('is_active', true);
 
       if (error) throw error;
-      setProperties(data || []);
       
-      if (data && data.length > 0) {
-        generatePricingSuggestions(data);
+      // Transform data to match expected interface
+      const transformedData = data?.map(property => ({
+        ...property,
+        location: `${property.city}, ${property.country}`,
+        type: property.property_type
+      })) || [];
+      
+      setProperties(transformedData);
+      
+      if (transformedData.length > 0) {
+        generatePricingSuggestions(transformedData);
       }
     } catch (error) {
       console.error('Error fetching properties:', error);

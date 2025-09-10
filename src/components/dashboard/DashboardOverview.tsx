@@ -1,7 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Building2, Calendar, DollarSign, TrendingUp, Users } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import TotemVisualization from './TotemVisualization';
+import { 
+  Building2, 
+  Calendar, 
+  TrendingUp, 
+  Users, 
+  DollarSign,
+  CheckCircle,
+  Clock,
+  Star,
+  AlertCircle,
+  PlusCircle,
+  ExternalLink,
+  Zap
+} from 'lucide-react';
 
 interface DashboardStats {
   totalProperties: number;
@@ -136,11 +153,16 @@ const DashboardOverview: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-        <p className="text-muted-foreground">
-          Welcome back! Here's an overview of your hospitality business.
-        </p>
+      {/* Totem Visualization */}
+      <TotemVisualization />
+      
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Přehled výkonu</h1>
+          <p className="text-muted-foreground">
+            Detailní metriky vašeho podnikání v pohostinství
+          </p>
+        </div>
       </div>
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
