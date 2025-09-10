@@ -15,8 +15,7 @@ import {
   Clock,
   Sparkles,
   Brain,
-  AlertCircle,
-  RefreshCw
+  AlertCircle
 } from 'lucide-react';
 
 interface Property {
@@ -44,10 +43,29 @@ interface AIPricingSuggestion {
 
 // AI Service class
 class AIPricingService {
-  private generateSmartSuggestions(property: Property) {
+  private async callAI(prompt: string): Promise<any> {
+    try {
+      const response = await fetch('/api/ai-pricing', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+      
+      if (!response.ok) {
+        throw new Error('AI service unavailable');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.warn('AI service failed, using fallback:', error);
+      return this.generateSmartFallback(prompt);
+    }
+  }
+
+  private generateSmartFallback(prompt: string) {
     const suggestions = [];
     const dates = this.getNext14Days();
-    const basePrice = property.base_price;
+    const basePrice = this.extractBasePriceFromPrompt(prompt);
     
     dates.forEach((date, index) => {
       const dateObj = new Date(date);
@@ -59,7 +77,7 @@ class AIPricingService {
       let multiplier = 1.0;
       let reasoning = 'Standard pricing maintained';
       let factors = ['baseline'];
-      let impact: 'increase' | 'decrease' | 'maintain' = 'maintain';
+      let impact = 'maintain';
       
       // Weekend premium
       if (isWeekend) {
@@ -95,16 +113,6 @@ class AIPricingService {
         factors.push('seasonal');
       }
       
-      // Winter discount (except holidays)
-      if ((month >= 11 || month <= 2) && !isHoliday) {
-        multiplier *= 0.95;
-        if (!reasoning.includes('discount')) {
-          reasoning += ' + winter season adjustment';
-        }
-        factors.push('seasonal');
-        if (impact === 'maintain') impact = 'decrease';
-      }
-      
       const suggestedPrice = Math.round(basePrice * multiplier);
       
       if (suggestedPrice !== basePrice) {
@@ -132,14 +140,16 @@ class AIPricingService {
     return dates;
   }
   
+  private extractBasePriceFromPrompt(prompt: string): number {
+    const match = prompt.match(/Base Price: \$(\d+)/);
+    return match ? parseInt(match[1]) : 100;
+  }
+  
   private isHoliday(date: Date): boolean {
     const holidays = [
       { month: 11, day: 25 }, // Christmas
       { month: 0, day: 1 },   // New Year
       { month: 6, day: 4 },   // July 4th
-      { month: 11, day: 24 }, // Christmas Eve
-      { month: 11, day: 31 }, // New Year's Eve
-      { month: 9, day: 31 },  // Halloween
     ];
     
     return holidays.some(h => 
@@ -154,7 +164,6 @@ class AIPricingService {
     if (isHoliday) confidence += 10;
     if (factors.includes('seasonal')) confidence += 5;
     if (factors.includes('last_minute')) confidence -= 10;
-    if (factors.length > 2) confidence += 5; // Multiple factors increase confidence
     
     return Math.min(95, Math.max(60, confidence));
   }
@@ -163,7 +172,8 @@ class AIPricingService {
     const allSuggestions: AIPricingSuggestion[] = [];
     
     for (const property of properties) {
-      const response = this.generateSmartSuggestions(property);
+      const prompt = this.buildPricingPrompt(property);
+      const response = await this.callAI(prompt);
       
       const suggestions = response.suggestions?.map((s: any) => ({
         propertyId: property.id,
@@ -181,14 +191,22 @@ class AIPricingService {
       allSuggestions.push(...suggestions);
     }
     
-    // Sort by confidence and potential revenue impact
-    return allSuggestions
-      .sort((a, b) => {
-        const aImpact = Math.abs(a.suggestedPrice - a.currentPrice) * (a.confidence / 100);
-        const bImpact = Math.abs(b.suggestedPrice - b.currentPrice) * (b.confidence / 100);
-        return bImpact - aImpact;
-      })
-      .slice(0, 12);
+    return allSuggestions.slice(0, 10);
+  }
+  
+  private buildPricingPrompt(property: Property): string {
+    return `
+Property: ${property.name}
+Type: ${property.type || 'accommodation'}
+Base Price: $${property.base_price}
+Location: ${property.location || 'Unknown'}
+Analyze pricing for the next 14 days considering:
+- Weekend/weekday patterns
+- Seasonal factors
+- Market demand
+- Last-minute opportunities
+Return suggestions for dates where price should change.
+    `.trim();
   }
   
   private determineRuleType(factors: string[]): string {
@@ -206,16 +224,25 @@ const AIPricingSuggestions: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [generatingPrices, setGeneratingPrices] = useState(false);
   const [aiService] = useState(() => new AIPricingService());
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [isAiConnected, setIsAiConnected] = useState(false);
 
   useEffect(() => {
     fetchProperties();
+    checkAiConnection();
   }, []);
 
+  const checkAiConnection = async () => {
+    try {
+      await fetch('/api/ai-pricing/health');
+      setIsAiConnected(true);
+    } catch (error) {
+      setIsAiConnected(false);
+      console.warn('AI service not available, using smart fallback');
+    }
+  };
 
   const fetchProperties = async () => {
     try {
-      setLoading(true);
       const { data, error } = await supabase
         .from('properties')
         .select('id, name, base_price, currency, city, country, property_type, amenities')
@@ -233,7 +260,7 @@ const AIPricingSuggestions: React.FC = () => {
       setProperties(transformedData);
       
       if (transformedData.length > 0) {
-        await generatePricingSuggestions(transformedData);
+        generatePricingSuggestions(transformedData);
       }
     } catch (error) {
       console.error('Error fetching properties:', error);
@@ -252,20 +279,15 @@ const AIPricingSuggestions: React.FC = () => {
     
     try {
       const targetProperties = propertiesData || properties;
-      if (targetProperties.length === 0) {
-        setSuggestions([]);
-        setLastUpdated(new Date());
-        return;
-      }
-      
       const newSuggestions = await aiService.generatePricingSuggestions(targetProperties);
       setSuggestions(newSuggestions);
-      setLastUpdated(new Date());
       
-      toast({
-        title: 'Success',
-        description: `Generated ${newSuggestions.length} pricing suggestions`,
-      });
+      if (newSuggestions.length > 0) {
+        toast({
+          title: 'Success',
+          description: `Generated ${newSuggestions.length} pricing suggestions`,
+        });
+      }
     } catch (error) {
       console.error('Error generating pricing suggestions:', error);
       toast({
@@ -378,28 +400,30 @@ const AIPricingSuggestions: React.FC = () => {
             AI Pricing Suggestions
           </h2>
           <p className="text-gray-600">
-            Smart pricing recommendations powered by advanced algorithms
-            {lastUpdated && (
-              <span className="text-sm text-muted-foreground ml-2">
-                • Last updated: {lastUpdated.toLocaleTimeString()}
-              </span>
-            )}
+            Smart pricing recommendations powered by {isAiConnected ? 'AI analysis' : 'advanced algorithms'}
           </p>
         </div>
         
         <div className="flex items-center space-x-3">
+          {!isAiConnected && (
+            <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-300">
+              <AlertCircle className="h-3 w-3 mr-1" />
+              Fallback Mode
+            </Badge>
+          )}
+          
           <Button 
             onClick={() => generatePricingSuggestions()}
             disabled={generatingPrices}
           >
             {generatingPrices ? (
               <>
-                <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                <Clock className="mr-2 h-4 w-4 animate-spin" />
                 Analyzing...
               </>
             ) : (
               <>
-                <RefreshCw className="mr-2 h-4 w-4" />
+                <Brain className="mr-2 h-4 w-4" />
                 Refresh Analysis
               </>
             )}
@@ -426,7 +450,7 @@ const AIPricingSuggestions: React.FC = () => {
               No pricing adjustments recommended at this time. Check back later or refresh analysis.
             </p>
             <Button onClick={() => generatePricingSuggestions()}>
-              <RefreshCw className="mr-2 h-4 w-4" />
+              <Brain className="mr-2 h-4 w-4" />
               Refresh Analysis
             </Button>
           </CardContent>
@@ -512,10 +536,13 @@ const AIPricingSuggestions: React.FC = () => {
         <CardHeader>
           <CardTitle className="flex items-center">
             <Sparkles className="mr-2 h-5 w-5" />
-            Smart Pricing Engine
+            {isAiConnected ? 'AI Pricing Intelligence' : 'Smart Pricing Engine'}
           </CardTitle>
           <CardDescription>
-            Advanced algorithms optimize pricing using proven hospitality rules and market patterns
+            {isAiConnected 
+              ? 'AI analyzes multiple factors to optimize your pricing'
+              : 'Advanced algorithms optimize pricing using proven hospitality rules'
+            }
           </CardDescription>
         </CardHeader>
         <CardContent>
