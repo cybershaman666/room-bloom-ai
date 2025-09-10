@@ -29,6 +29,7 @@ interface DashboardStats {
 }
 
 const DashboardOverview: React.FC = () => {
+  const { user } = useAuth();
   const [stats, setStats] = useState<DashboardStats>({
     totalProperties: 0,
     totalReservations: 0,
@@ -39,21 +40,27 @@ const DashboardOverview: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchDashboardStats();
-  }, []);
+    if (user) {
+      fetchDashboardStats();
+    }
+  }, [user]);
 
   const fetchDashboardStats = async () => {
     try {
+      if (!user) return;
+      
       // Fetch properties count
       const { count: propertiesCount } = await supabase
         .from('properties')
         .select('*', { count: 'exact', head: true })
-        .eq('is_active', true);
+        .eq('is_active', true)
+        .eq('owner_id', user.id);
 
-      // Fetch reservations count
+      // Fetch reservations count - get through properties to ensure user owns them
       const { count: reservationsCount } = await supabase
         .from('reservations')
-        .select('*', { count: 'exact', head: true });
+        .select('*, properties!inner(*)', { count: 'exact', head: true })
+        .eq('properties.owner_id', user.id);
 
       // Fetch this month's revenue
       const startOfMonth = new Date();
@@ -62,7 +69,8 @@ const DashboardOverview: React.FC = () => {
       
       const { data: reservations } = await supabase
         .from('reservations')
-        .select('total_price')
+        .select('total_price, properties!inner(*)')
+        .eq('properties.owner_id', user.id)
         .gte('check_in', startOfMonth.toISOString())
         .eq('status', 'confirmed');
 
@@ -75,7 +83,8 @@ const DashboardOverview: React.FC = () => {
 
       const { count: upcomingCount } = await supabase
         .from('reservations')
-        .select('*', { count: 'exact', head: true })
+        .select('*, properties!inner(*)', { count: 'exact', head: true })
+        .eq('properties.owner_id', user.id)
         .gte('check_in', today.toISOString().split('T')[0])
         .lte('check_in', nextWeek.toISOString().split('T')[0])
         .eq('status', 'confirmed');

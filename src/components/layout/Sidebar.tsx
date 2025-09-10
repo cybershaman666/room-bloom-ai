@@ -43,10 +43,12 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onPageChange }) => {
 
   const fetchProperties = async () => {
     try {
+      if (!user?.id) return;
+      
       const { data, error } = await supabase
         .from('properties')
         .select('id, name, property_type')
-        .eq('owner_id', user?.id)
+        .eq('owner_id', user.id)
         .eq('is_active', true)
         .order('name');
 
