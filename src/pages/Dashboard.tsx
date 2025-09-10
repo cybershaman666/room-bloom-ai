@@ -4,6 +4,7 @@ import Sidebar from '@/components/layout/Sidebar';
 import DashboardOverview from '@/components/dashboard/DashboardOverview';
 import PropertyManagement from '@/components/properties/PropertyManagement';
 import ReservationCalendar from '@/components/reservations/ReservationCalendar';
+import ReservationManagement from '@/components/reservations/ReservationManagement';
 import AIPricingSuggestions from '@/components/pricing/AIPricingSuggestions';
 
 const Dashboard: React.FC = () => {
@@ -28,6 +29,8 @@ const Dashboard: React.FC = () => {
       case 'properties':
         return <PropertyManagement />;
       case 'reservations':
+        return <ReservationManagement />;
+      case 'calendar':
         return <ReservationCalendar />;
       case 'pricing':
         return <AIPricingSuggestions />;

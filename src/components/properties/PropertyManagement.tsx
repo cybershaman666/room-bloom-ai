@@ -77,6 +77,7 @@ const PropertyManagement: React.FC = () => {
     if (!user) return;
 
     try {
+      setLoading(true);
       const { data, error } = await supabase
         .from('properties')
         .select('*')

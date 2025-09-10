@@ -17,7 +17,8 @@ import {
   AlertCircle,
   PlusCircle,
   ExternalLink,
-  Zap
+  Zap,
+  RefreshCw
 } from 'lucide-react';
 
 interface DashboardStats {
@@ -38,6 +39,7 @@ const DashboardOverview: React.FC = () => {
     upcomingCheckIns: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -48,6 +50,8 @@ const DashboardOverview: React.FC = () => {
   const fetchDashboardStats = async () => {
     try {
       if (!user) return;
+      
+      setRefreshing(true);
       
       // Fetch properties count
       const { count: propertiesCount } = await supabase
@@ -106,6 +110,7 @@ const DashboardOverview: React.FC = () => {
       console.error('Error fetching dashboard stats:', error);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -172,6 +177,18 @@ const DashboardOverview: React.FC = () => {
             Detailní metriky vašeho podnikání v pohostinství
           </p>
         </div>
+        <Button 
+          variant="outline" 
+          onClick={fetchDashboardStats}
+          disabled={refreshing}
+        >
+          {refreshing ? (
+            <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+          ) : (
+            <RefreshCw className="h-4 w-4 mr-2" />
+          )}
+          Refresh
+        </Button>
       </div>
       
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
