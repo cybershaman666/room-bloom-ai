@@ -62,8 +62,8 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onPageChange }) => {
 
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'rooms', label: 'Rooms', icon: Building2 },
     { id: 'properties', label: 'Properties', icon: Building2 },
-    { id: 'reservations', label: 'Reservations', icon: Users },
     { id: 'calendar', label: 'Calendar', icon: Calendar },
     { id: 'pricing', label: 'AI Pricing', icon: DollarSign },
     { id: 'market', label: 'Nearby Rates', icon: MapPin },

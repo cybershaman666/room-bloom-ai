@@ -61,12 +61,12 @@ const Dashboard: React.FC = () => {
     switch (currentPage) {
       case 'dashboard':
         return renderWithErrorBoundary(<DashboardOverview />, 'DashboardOverview');
+      case 'rooms':
+        return renderWithErrorBoundary(<RoomsGanttChart />, 'RoomsGanttChart');
       case 'properties':
         return renderWithErrorBoundary(<PropertyManagement />, 'PropertyManagement');
-      case 'reservations':
-        return renderWithErrorBoundary(<GanttChart />, 'GanttChart');
       case 'calendar':
-        return renderWithErrorBoundary(<GanttChart />, 'GanttChart');
+        return renderWithErrorBoundary(<ReservationCalendar />, 'ReservationCalendar');
       case 'pricing':
         return renderWithErrorBoundary(<AIPricingSuggestions />, 'AIPricingSuggestions');
       case 'market':
