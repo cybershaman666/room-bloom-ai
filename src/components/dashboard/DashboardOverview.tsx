@@ -121,28 +121,28 @@ const DashboardOverview: React.FC = () => {
       value: stats.totalProperties.toString(),
       description: 'Active listings',
       icon: Building2,
-      color: 'text-blue-600',
+      color: 'text-primary',
     },
     {
       title: 'Monthly Revenue',
       value: `$${stats.monthlyRevenue.toLocaleString()}`,
       description: 'This month',
       icon: DollarSign,
-      color: 'text-green-600',
+      color: 'text-accent',
     },
     {
       title: 'Occupancy Rate',
       value: `${stats.occupancyRate}%`,
       description: 'This month',
       icon: TrendingUp,
-      color: 'text-purple-600',
+      color: 'text-secondary',
     },
     {
       title: 'Upcoming Check-ins',
       value: stats.upcomingCheckIns.toString(),
       description: 'Next 7 days',
       icon: Calendar,
-      color: 'text-orange-600',
+      color: 'text-muted-foreground',
     },
   ];
 

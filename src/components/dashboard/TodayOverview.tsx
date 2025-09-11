@@ -167,11 +167,11 @@ const TodayOverview = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'pricing': return <TrendingUp className="w-4 h-4" />;
-      case 'operations': return <Clock className="w-4 h-4" />;
-      case 'marketing': return <Users className="w-4 h-4" />;
-      case 'maintenance': return <Wrench className="w-4 h-4" />;
-      default: return <Lightbulb className="w-4 h-4" />;
+      case 'pricing': return <TrendingUp className="w-4 h-4 text-primary" />;
+      case 'operations': return <Clock className="w-4 h-4 text-accent" />;
+      case 'marketing': return <Users className="w-4 h-4 text-secondary" />;
+      case 'maintenance': return <Wrench className="w-4 h-4 text-destructive" />;
+      default: return <Lightbulb className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -198,8 +198,8 @@ const TodayOverview = () => {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <Card className="glass-card border-0">
           <CardContent className="p-4 text-center">
-            <div className="flex items-center justify-center w-8 h-8 mx-auto mb-2 rounded-full bg-emerald-500/20">
-              <UserCheck className="w-4 h-4 text-emerald-600" />
+            <div className="flex items-center justify-center w-8 h-8 mx-auto mb-2 rounded-full bg-primary/20">
+              <UserCheck className="w-4 h-4 text-primary" />
             </div>
             <div className="text-2xl font-bold text-foreground">{activity.arrivals}</div>
             <div className="text-xs text-muted-foreground">Arrivals</div>
@@ -208,8 +208,8 @@ const TodayOverview = () => {
 
         <Card className="glass-card border-0">
           <CardContent className="p-4 text-center">
-            <div className="flex items-center justify-center w-8 h-8 mx-auto mb-2 rounded-full bg-blue-500/20">
-              <Calendar className="w-4 h-4 text-blue-600" />
+            <div className="flex items-center justify-center w-8 h-8 mx-auto mb-2 rounded-full bg-accent/20">
+              <Calendar className="w-4 h-4 text-accent" />
             </div>
             <div className="text-2xl font-bold text-foreground">{activity.checkIns}</div>
             <div className="text-xs text-muted-foreground">Check-ins</div>
@@ -218,8 +218,8 @@ const TodayOverview = () => {
 
         <Card className="glass-card border-0">
           <CardContent className="p-4 text-center">
-            <div className="flex items-center justify-center w-8 h-8 mx-auto mb-2 rounded-full bg-purple-500/20">
-              <Users className="w-4 h-4 text-purple-600" />
+            <div className="flex items-center justify-center w-8 h-8 mx-auto mb-2 rounded-full bg-secondary/20">
+              <Users className="w-4 h-4 text-secondary" />
             </div>
             <div className="text-2xl font-bold text-foreground">{activity.stayovers}</div>
             <div className="text-xs text-muted-foreground">Stayovers</div>
@@ -228,8 +228,8 @@ const TodayOverview = () => {
 
         <Card className="glass-card border-0">
           <CardContent className="p-4 text-center">
-            <div className="flex items-center justify-center w-8 h-8 mx-auto mb-2 rounded-full bg-orange-500/20">
-              <UserX className="w-4 h-4 text-orange-600" />
+            <div className="flex items-center justify-center w-8 h-8 mx-auto mb-2 rounded-full bg-accent/30">
+              <UserX className="w-4 h-4 text-accent-foreground" />
             </div>
             <div className="text-2xl font-bold text-foreground">{activity.checkOuts}</div>
             <div className="text-xs text-muted-foreground">Check-outs</div>
@@ -238,8 +238,8 @@ const TodayOverview = () => {
 
         <Card className="glass-card border-0">
           <CardContent className="p-4 text-center">
-            <div className="flex items-center justify-center w-8 h-8 mx-auto mb-2 rounded-full bg-amber-500/20">
-              <AlertTriangle className="w-4 h-4 text-amber-600" />
+            <div className="flex items-center justify-center w-8 h-8 mx-auto mb-2 rounded-full bg-secondary/30">
+              <AlertTriangle className="w-4 h-4 text-secondary-foreground" />
             </div>
             <div className="text-2xl font-bold text-foreground">{activity.needsCleaning}</div>
             <div className="text-xs text-muted-foreground">Need Cleaning</div>
@@ -248,8 +248,8 @@ const TodayOverview = () => {
 
         <Card className="glass-card border-0">
           <CardContent className="p-4 text-center">
-            <div className="flex items-center justify-center w-8 h-8 mx-auto mb-2 rounded-full bg-red-500/20">
-              <Wrench className="w-4 h-4 text-red-600" />
+            <div className="flex items-center justify-center w-8 h-8 mx-auto mb-2 rounded-full bg-destructive/20">
+              <Wrench className="w-4 h-4 text-destructive" />
             </div>
             <div className="text-2xl font-bold text-foreground">{activity.maintenance}</div>
             <div className="text-xs text-muted-foreground">Maintenance</div>

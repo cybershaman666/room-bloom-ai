@@ -85,11 +85,11 @@ const TotemVisualization: React.FC<TotemVisualizationProps> = ({
   };
 
   const getTotemHealth = (score: number): { color: string; intensity: string; status: string } => {
-    if (score >= 85) return { color: 'text-emerald-500', intensity: 'opacity-100', status: 'Vynikající' };
-    if (score >= 70) return { color: 'text-green-500', intensity: 'opacity-90', status: 'Dobrý' };
-    if (score >= 55) return { color: 'text-yellow-500', intensity: 'opacity-75', status: 'Průměrný' };
-    if (score >= 40) return { color: 'text-orange-500', intensity: 'opacity-60', status: 'Slabý' };
-    return { color: 'text-red-500', intensity: 'opacity-40', status: 'Kritický' };
+    if (score >= 85) return { color: 'text-primary', intensity: 'opacity-100', status: 'Vynikající' };
+    if (score >= 70) return { color: 'text-accent', intensity: 'opacity-90', status: 'Dobrý' };
+    if (score >= 55) return { color: 'text-secondary', intensity: 'opacity-75', status: 'Průměrný' };
+    if (score >= 40) return { color: 'text-muted-foreground', intensity: 'opacity-60', status: 'Slabý' };
+    return { color: 'text-destructive', intensity: 'opacity-40', status: 'Kritický' };
   };
 
   const renderTotem = (metrics: TotemMetrics, size: 'large' | 'mini' = 'large') => {
@@ -206,14 +206,14 @@ const TotemVisualization: React.FC<TotemVisualizationProps> = ({
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <Users className="h-5 w-5 text-blue-500" />
+                    <Users className="h-5 w-5 text-primary" />
                     <span className="font-medium">Obsazenost</span>
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold">{currentMetrics?.occupancyRate}%</div>
-                    <div className="w-24 bg-gray-200 rounded-full h-2 mt-1">
+                    <div className="w-24 bg-muted rounded-full h-2 mt-1">
                       <div 
-                        className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                        className="bg-primary h-2 rounded-full transition-all duration-300"
                         style={{ width: `${currentMetrics?.occupancyRate}%` }}
                       />
                     </div>
@@ -222,14 +222,14 @@ const TotemVisualization: React.FC<TotemVisualizationProps> = ({
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <Star className="h-5 w-5 text-yellow-500" />
+                    <Star className="h-5 w-5 text-accent" />
                     <span className="font-medium">Spokojenost hostů</span>
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold">{currentMetrics?.guestSatisfaction}%</div>
-                    <div className="w-24 bg-gray-200 rounded-full h-2 mt-1">
+                    <div className="w-24 bg-muted rounded-full h-2 mt-1">
                       <div 
-                        className="bg-yellow-500 h-2 rounded-full transition-all duration-300"
+                        className="bg-accent h-2 rounded-full transition-all duration-300"
                         style={{ width: `${currentMetrics?.guestSatisfaction}%` }}
                       />
                     </div>
@@ -238,14 +238,14 @@ const TotemVisualization: React.FC<TotemVisualizationProps> = ({
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <DollarSign className="h-5 w-5 text-green-500" />
+                    <DollarSign className="h-5 w-5 text-secondary" />
                     <span className="font-medium">Výnos z pokojů</span>
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold">{currentMetrics?.revenuePerRoom}€</div>
-                    <div className="w-24 bg-gray-200 rounded-full h-2 mt-1">
+                    <div className="w-24 bg-muted rounded-full h-2 mt-1">
                       <div 
-                        className="bg-green-500 h-2 rounded-full transition-all duration-300"
+                        className="bg-secondary h-2 rounded-full transition-all duration-300"
                         style={{ width: `${Math.min(100, (currentMetrics?.revenuePerRoom || 0) / 2)}%` }}
                       />
                     </div>
@@ -328,19 +328,19 @@ const TotemVisualization: React.FC<TotemVisualizationProps> = ({
                 
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                   <div className="text-center p-4 bg-muted/20 rounded-lg">
-                    <Users className="h-6 w-6 mx-auto mb-2 text-blue-500" />
+                    <Users className="h-6 w-6 mx-auto mb-2 text-primary" />
                     <div className="text-2xl font-bold">{selectedDay.occupancyRate}%</div>
                     <div className="text-sm text-muted-foreground">Obsazenost</div>
                   </div>
                   
                   <div className="text-center p-4 bg-muted/20 rounded-lg">
-                    <Star className="h-6 w-6 mx-auto mb-2 text-yellow-500" />
+                    <Star className="h-6 w-6 mx-auto mb-2 text-accent" />
                     <div className="text-2xl font-bold">{selectedDay.guestSatisfaction}%</div>
                     <div className="text-sm text-muted-foreground">Spokojenost</div>
                   </div>
                   
                   <div className="text-center p-4 bg-muted/20 rounded-lg">
-                    <DollarSign className="h-6 w-6 mx-auto mb-2 text-green-500" />
+                    <DollarSign className="h-6 w-6 mx-auto mb-2 text-secondary" />
                     <div className="text-2xl font-bold">{selectedDay.revenuePerRoom}€</div>
                     <div className="text-sm text-muted-foreground">Výnos/pokoj</div>
                   </div>

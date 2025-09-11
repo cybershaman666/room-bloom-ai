@@ -15,16 +15,16 @@
     --popover: 0 0% 100% / 0.98;
     --popover-foreground: 160 30% 12%;
 
-    --primary: 145 65% 45%;             /* živá přírodní zelená */
+    --primary: 145 65% 35%;             /* tmavší zelená pro lepší kontrast */
     --primary-foreground: 0 0% 98%;
 
-    --secondary: 35 85% 65%;            /* teplá zlatavá oranžová */
-    --secondary-foreground: 160 30% 12%;
+    --secondary: 35 85% 55%;            /* sytější oranžová */
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 120 25% 92%;               /* svetlejšie pozadie bez priehľadnosti */
-    --muted-foreground: 160 25% 45%;    /* tmavší text pre lepší kontrast */
+    --muted: 120 25% 95%;               /* světlejší pozadí */
+    --muted-foreground: 160 30% 20%;    /* tmavší text pro lepší kontrast */
 
-    --accent: 185 70% 50%;              /* čistý tyrkys */
+    --accent: 185 70% 40%;              /* tmavší tyrkys pro lepší kontrast */
     --accent-foreground: 0 0% 98%;
 
     --destructive: 0 70% 50%;
@@ -75,16 +75,16 @@
     --popover: 160 20% 10% / 0.98;
     --popover-foreground: 0 0% 95%;
 
-    --primary: 145 65% 60%;            /* jasnější zelená v dark mode */
+    --primary: 145 65% 55%;            /* světlejší zelená v dark mode */
     --primary-foreground: 160 30% 8%;
 
-    --secondary: 35 85% 70%;           /* jasnější oranžová */
+    --secondary: 35 85% 65%;           /* jasná oranžová */
     --secondary-foreground: 160 30% 8%;
 
-    --muted: 160 20% 18%;              /* nepriehľadné tmavé pozadie */
-    --muted-foreground: 0 0% 70%;      /* svetlejší text */
+    --muted: 160 20% 15%;              /* tmavé pozadí */
+    --muted-foreground: 0 0% 75%;      /* světlejší text pro lepší kontrast */
 
-    --accent: 185 70% 60%;             /* jasnější tyrkys */
+    --accent: 185 70% 55%;             /* světlejší tyrkys */
     --accent-foreground: 160 30% 8%;
 
     --destructive: 0 70% 60%;
