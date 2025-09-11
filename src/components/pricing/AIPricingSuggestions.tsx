@@ -215,6 +215,10 @@ Only return the JSON object, no additional text or markdown formatting.`;
       { month: 11, day: 25 }, // Christmas
       { month: 0, day: 1 },   // New Year
       { month: 6, day: 4 },   // July 4th
+      { month: 11, day: 24 }, // Christmas Eve
+      { month: 11, day: 31 }, // New Year's Eve
+      { month: 9, day: 31 },  // Halloween
+      { month: 1, day: 14 },  // Valentine's Day
     ];
     
     return holidays.some(h => 
