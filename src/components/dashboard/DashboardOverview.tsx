@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import TotemVisualization from './TotemVisualization';
+import TodayOverview from './TodayOverview';
 import { 
   Building2, 
   Calendar, 
@@ -167,6 +168,9 @@ const DashboardOverview: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Today's Overview */}
+      <TodayOverview />
+      
       {/* Totem Visualization */}
       <TotemVisualization />
       

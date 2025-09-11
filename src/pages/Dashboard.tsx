@@ -8,6 +8,7 @@ import ReservationCalendar from '@/components/reservations/ReservationCalendar';
 import ReservationManagement from '@/components/reservations/ReservationManagement';
 import AIPricingSuggestions from '@/components/pricing/AIPricingSuggestions';
 import AccommodationComparison from '@/components/market/AccommodationComparison';
+import GanttChart from '@/components/reservations/GanttChart';
 
 const Dashboard: React.FC = () => {
   const [currentPage, setCurrentPage] = useState('dashboard');
@@ -63,9 +64,9 @@ const Dashboard: React.FC = () => {
       case 'properties':
         return renderWithErrorBoundary(<PropertyManagement />, 'PropertyManagement');
       case 'reservations':
-        return renderWithErrorBoundary(<ReservationManagement />, 'ReservationManagement');
+        return renderWithErrorBoundary(<GanttChart />, 'GanttChart');
       case 'calendar':
-        return renderWithErrorBoundary(<ReservationCalendar />, 'ReservationCalendar');
+        return renderWithErrorBoundary(<GanttChart />, 'GanttChart');
       case 'pricing':
         return renderWithErrorBoundary(<AIPricingSuggestions />, 'AIPricingSuggestions');
       case 'market':

@@ -150,11 +150,11 @@ Only return the JSON object, no additional text or markdown formatting.`;
       
     } catch (error) {
       console.warn('AI service failed, using fallback data:', error);
-      return this.generateFallbackData(location);
+      return this.generateFallbackData();
     }
   }
 
-  private generateFallbackData(location?: { lat: number; lng: number }) {
+  private generateFallbackData() {
     // Generate realistic fallback data for accommodation search
     const accommodationTypes = ['hotel', 'camp', 'apartment', 'guesthouse', 'hostel'] as const;
     const accommodations = [];
@@ -162,7 +162,7 @@ Only return the JSON object, no additional text or markdown formatting.`;
     for (let i = 0; i < 8; i++) {
       const type = accommodationTypes[Math.floor(Math.random() * accommodationTypes.length)];
       // Adjust prices for Czech market (CZK converted to USD for display)
-      const basePriceCZK = type === 'hotel' ? 1800 : type === 'resort' ? 2800 : type === 'camp' ? 800 : type === 'apartment' ? 1500 : 1000;
+      const basePriceCZK = type === 'hotel' ? 1800 : type === 'camp' ? 800 : type === 'apartment' ? 1500 : 1000;
       const basePrice = Math.round(basePriceCZK / 23); // CZK to USD conversion (~23 CZK per USD)
       const priceVariation = Math.random() * 0.6 + 0.7; // ±30% price variation
       
@@ -178,8 +178,8 @@ Only return the JSON object, no additional text or markdown formatting.`;
           address: `${Math.floor(Math.random() * 999) + 1} ${this.getRandomStreetName()}`,
           distance: Math.round((Math.random() * 15 + 0.5) * 10) / 10,
           coordinates: {
-            lat: (location?.lat || 50.0755) + (Math.random() - 0.5) * 0.1,
-            lng: (location?.lng || 14.4378) + (Math.random() - 0.5) * 0.1
+            lat: 50.0755 + (Math.random() - 0.5) * 0.1,
+            lng: 14.4378 + (Math.random() - 0.5) * 0.1
           }
         },
         amenities: this.getRandomAmenities(),
